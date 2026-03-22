@@ -1,0 +1,16 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore env files
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# Mac OS
+.DS_Store
+
+# Vercel
+.vercel/
