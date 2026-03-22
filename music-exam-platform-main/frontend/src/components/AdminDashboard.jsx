@@ -670,11 +670,13 @@ const AdminDashboard = () => {
                                 onChange={(e) => setExamForm({ ...examForm, cross_examiner_id: e.target.value })}
                             >
                                 <option value="">-- None --</option>
-                                {crossExaminerOptions.map(ce => (
-                                    <option key={ce._id || ce.id} value={ce._id || ce.id}>
-                                        {ce.name} ({ce.email}) — {ce.role === 'cross_examiner' ? 'Cross Examiner' : 'Evaluator'}
-                                    </option>
-                                ))}
+                                {crossExaminerOptions
+                                    .filter(ce => (ce._id || ce.id).toString() !== examForm.evaluator_id?.toString())
+                                    .map(ce => (
+                                        <option key={ce._id || ce.id} value={ce._id || ce.id}>
+                                            {ce.name} ({ce.email}) — {ce.role === 'cross_examiner' ? 'Cross Examiner' : 'Evaluator'}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
 
@@ -838,11 +840,13 @@ const AdminDashboard = () => {
                                     onChange={(e) => setEditingExam({ ...editingExam, cross_examiner_id: e.target.value })}
                                 >
                                     <option value="">-- None --</option>
-                                    {crossExaminerOptions.map(ce => (
-                                        <option key={ce._id || ce.id} value={ce._id || ce.id}>
-                                            {ce.name} ({ce.email}) — {ce.role === 'cross_examiner' ? 'Cross Examiner' : 'Evaluator'}
-                                        </option>
-                                    ))}
+                                    {crossExaminerOptions
+                                        .filter(ce => (ce._id || ce.id).toString() !== editingExam.evaluator_id?.toString())
+                                        .map(ce => (
+                                            <option key={ce._id || ce.id} value={ce._id || ce.id}>
+                                                {ce.name} ({ce.email}) — {ce.role === 'cross_examiner' ? 'Cross Examiner' : 'Evaluator'}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
 

@@ -189,6 +189,10 @@ router.post('/exams', async (req, res) => {
         examData.student_id = student_id;
         examData.evaluator_id = evaluator_id;
 
+        if (evaluator_id && cross_examiner_id && evaluator_id.toString() === cross_examiner_id.toString()) {
+            return res.status(400).json({ error: 'Evaluator and Cross-Examiner cannot be the same person for an exam' });
+        }
+
         // Also ensure duration is set if duration_minutes is provided but not duration
         if (examData.duration_minutes && !examData.duration) {
             examData.duration = examData.duration_minutes;
@@ -280,12 +284,20 @@ router.put('/exams/:id', async (req, res) => {
         if (student_id) examData.student_id = student_id;
         if (evaluator_id) examData.evaluator_id = evaluator_id;
 
+        // Get old exam to handle cross-examiner reassignment
+        const oldExam = await Exam.findById(req.params.id);
+        if (!oldExam) return res.status(404).json({ error: 'Exam not found' });
+
+        const finalEvaluatorId = evaluator_id || oldExam.evaluator_id;
+        const finalCrossExaminerId = cross_examiner_id !== undefined ? cross_examiner_id : oldExam.cross_examiner_id;
+
+        if (finalEvaluatorId && finalCrossExaminerId && finalEvaluatorId.toString() === finalCrossExaminerId.toString()) {
+            return res.status(400).json({ error: 'Evaluator and Cross-Examiner cannot be the same person for an exam' });
+        }
+
         if (examData.duration_minutes && !examData.duration) {
             examData.duration = examData.duration_minutes;
         }
-
-        // Get old exam to handle cross-examiner reassignment
-        const oldExam = await Exam.findById(req.params.id);
 
         const exam = await Exam.findByIdAndUpdate(req.params.id, examData, { new: true });
         if (!exam) return res.status(404).json({ error: 'Exam not found' });
