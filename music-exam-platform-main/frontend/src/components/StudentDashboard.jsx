@@ -55,8 +55,8 @@ const StudentDashboard = () => {
 
     const downloadCertPdf = (certId, candidateName) => {
         const token = localStorage.getItem('token');
-        const apiUrl = import.meta.env.VITE_API_URL || '/api';
-        fetch(`${apiUrl}/certificates/${certId}/pdf`, {
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        fetch(`${baseUrl}/certificates/${certId}/pdf`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(r => {
