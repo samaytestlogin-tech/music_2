@@ -1115,7 +1115,7 @@ const AdminDashboard = () => {
                                             </div>
                                             <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                                                 <a
-                                                    href={`http://localhost:5000/api/certificates/${cert._id}/pdf`}
+                                                    href="#"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="btn-secondary btn-sm"
@@ -1125,7 +1125,8 @@ const AdminDashboard = () => {
                                                         // open via fetch-blob approach
                                                         e.preventDefault();
                                                         const token = localStorage.getItem('token');
-                                                        fetch(`http://localhost:5000/api/certificates/${cert._id}/pdf`, {
+                                                        const apiUrl = import.meta.env.VITE_API_URL || '/api';
+                                                        fetch(`${apiUrl}/certificates/${cert._id}/pdf`, {
                                                             headers: { Authorization: `Bearer ${token}` }
                                                         })
                                                         .then(r => r.blob())
